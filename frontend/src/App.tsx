@@ -4,6 +4,7 @@ import { PRESETS } from './AccountControls'
 import Decide from './Decide'
 import Policy from './Policy'
 import Queue from './Queue'
+import ModelCard from './ModelCard'
 
 const VIEWS = [
   { id: 'decide', label: 'Decide' },
@@ -62,7 +63,7 @@ export default function App() {
         {view === 'queue' && (
           <Queue model={model} cutoff={cutoff} batch={batch} setBatch={setBatch} onOpen={openAccount} />
         )}
-        {view === 'model' && <p>{model?.trained_on}</p>}
+        {view === 'model' && <ModelCard model={model} />}
       </main>
     </div>
   )

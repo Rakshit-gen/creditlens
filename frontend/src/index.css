@@ -1419,3 +1419,190 @@ tbody tr:hover {
   opacity: 0.5;
   cursor: progress;
 }
+
+/* Model card */
+
+.modelcard {
+  display: grid;
+  gap: clamp(1.2rem, 3vw, 2rem);
+}
+
+.modelcard h2 {
+  font-size: var(--step-2);
+}
+
+.modelcard .sheet {
+  display: grid;
+  gap: 0.9rem;
+  align-content: start;
+}
+
+.metric {
+  align-content: start;
+}
+
+.metric-label {
+  font-weight: 700;
+  margin-top: 0.3rem;
+}
+
+.compare {
+  display: grid;
+  grid-template-columns: 11rem 1fr 3.4rem;
+  gap: 0.8rem;
+  align-items: center;
+  font-size: var(--step--1);
+  font-weight: 600;
+}
+
+.group-fill.is-faint {
+  background: var(--ink-faint);
+}
+
+.tradeoff-gap {
+  font-size: var(--step--1);
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--line);
+}
+
+.calib svg {
+  width: 100%;
+  max-width: 22rem;
+  display: block;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.calib-grid line {
+  stroke: var(--line);
+  stroke-width: 0.5;
+}
+
+.calib-grid text {
+  font-size: 4px;
+  fill: var(--ink-faint);
+}
+
+.calib-ideal {
+  stroke: var(--ink-faint);
+  stroke-width: 0.6;
+  stroke-dasharray: 2 2;
+}
+
+.calib-line {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 0.8;
+  opacity: 0.5;
+}
+
+.calib-dot {
+  fill: var(--decline);
+  stroke: var(--sheet);
+  stroke-width: 0.8;
+  cursor: pointer;
+  transition: r 0.2s var(--ease-spring);
+  animation: pop 0.5s var(--ease-spring) both;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.calib-dot:focus-visible {
+  outline: none;
+  stroke: var(--ink);
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0);
+  }
+}
+
+.calib-read {
+  min-height: 3em;
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+  text-align: center;
+  margin: 0 auto;
+}
+
+.curves-wrap {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.curves {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 1rem;
+  margin-top: 0.6rem;
+}
+
+.curve {
+  margin: 0;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  display: grid;
+  gap: 0.5rem;
+}
+
+.curve figcaption {
+  display: grid;
+  font-size: var(--step--1);
+  min-height: 2.6em;
+}
+
+.curve figcaption .is-decline {
+  color: var(--decline);
+  font-weight: 700;
+}
+
+.curve figcaption .is-approve {
+  color: var(--approve);
+  font-weight: 700;
+}
+
+.curve svg {
+  width: 100%;
+  height: 6rem;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.curve-zero {
+  stroke: var(--rule);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.curve-line {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.2;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 1.1s var(--ease-out) forwards;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.curve-cursor {
+  stroke: var(--decline);
+  stroke-width: 1.5;
+}
+
+@media (max-width: 560px) {
+  .compare {
+    grid-template-columns: 1fr 3.4rem;
+  }
+  .compare .group-track {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
