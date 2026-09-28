@@ -1644,6 +1644,12 @@ tbody tr:hover {
   margin: 0 auto;
 }
 
+.curve-note {
+  margin-top: 0.4rem;
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+
 .curves-wrap {
   display: grid;
   gap: 0.6rem;
@@ -1664,10 +1670,12 @@ tbody tr:hover {
   border: 1px solid var(--rule);
   display: grid;
   gap: 0.5rem;
+  align-content: start;
 }
 
 .curve figcaption {
   display: grid;
+  align-content: start;
   font-size: var(--step--1);
   min-height: 2.6em;
 }

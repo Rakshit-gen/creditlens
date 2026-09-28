@@ -5,10 +5,15 @@ const VALUE_FORMAT: Record<Feature, (v: number) => string> = {
   credit_limit: money,
   utilization: (v) => pct(v),
   payment_ratio: (v) => pct(v),
-  months_late_now: (v) => `${v.toFixed(1)} mo`,
-  late_months_6m: (v) => `${v.toFixed(1)} of 6`,
-  worst_delay_6m: (v) => `${v.toFixed(1)} mo`,
-  paid_in_full_6m: (v) => `${v.toFixed(1)} of 6`,
+  months_late_now: (v) => months(v),
+  late_months_6m: (v) => `${Math.round(v)} of 6`,
+  worst_delay_6m: (v) => months(v),
+  paid_in_full_6m: (v) => `${Math.round(v)} of 6`,
+}
+
+function months(v: number) {
+  const m = Math.round(v)
+  return m ? `${m} month${m > 1 ? 's' : ''} late` : 'on time'
 }
 
 export default function ModelCard({ model }: { model: ModelInfo | null }) {
@@ -96,7 +101,8 @@ function Compare({ label, value, faint }: { label: string; value: number; faint?
 }
 
 function Calibration({ points }: { points: ModelInfo['calibration'] }) {
-  const max = Math.min(1, Math.ceil(Math.max(...points.flatMap((p) => [p.predicted, p.actual])) * 10) / 10 + 0.05)
+  // Round the axis up to a multiple of 20% so the gridlines land on even numbers.
+  const max = Math.min(1, Math.ceil(Math.max(...points.flatMap((p) => [p.predicted, p.actual])) * 5) / 5)
   const s = (v: number) => (v / max) * 100
   const [hover, setHover] = useState<number | null>(null)
   const h = hover !== null ? points[hover] : null
@@ -146,6 +152,7 @@ function CurvePlot({ curve, format }: { curve: Curve; format: (v: number) => str
   const x = (k: number) => (k / (n - 1)) * 100
   const y = (p: number) => 50 - ((p - lo) / (hi - lo)) * 46 - 2
   const d = curve.points.map((p, k) => `${k ? 'L' : 'M'}${x(k).toFixed(2)} ${y(p).toFixed(2)}`).join('')
+  const flat = hi - lo - 20 < 5
 
   return (
     <figure className="curve">
@@ -171,6 +178,7 @@ function CurvePlot({ curve, format }: { curve: Curve; format: (v: number) => str
         <path d={d} className="curve-line" vectorEffect="non-scaling-stroke" />
         {i !== null && <line x1={x(i)} x2={x(i)} y1={0} y2={50} className="curve-cursor" vectorEffect="non-scaling-stroke" />}
       </svg>
+      {flat && <p className="curve-note">Barely moves the score once the other factors are known.</p>}
     </figure>
   )
 }
