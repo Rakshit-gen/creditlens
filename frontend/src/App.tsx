@@ -5,8 +5,10 @@ import Decide from './Decide'
 import Policy from './Policy'
 import Queue from './Queue'
 import ModelCard from './ModelCard'
+import Home from './Home'
 
 const VIEWS = [
+  { id: 'home', label: 'Home' },
   { id: 'decide', label: 'Decide' },
   { id: 'policy', label: 'Policy' },
   { id: 'queue', label: 'Queue' },
@@ -17,7 +19,7 @@ type View = (typeof VIEWS)[number]['id']
 
 const fromHash = (): View => {
   const h = window.location.hash.slice(1)
-  return VIEWS.some((v) => v.id === h) ? (h as View) : 'decide'
+  return VIEWS.some((v) => v.id === h) ? (h as View) : 'home'
 }
 
 export default function App() {
@@ -35,7 +37,10 @@ export default function App() {
 
   useEffect(() => {
     getModel().then(setModel, (e: Error) => setLoadError(e.message))
-    const onHash = () => setView(fromHash())
+    const onHash = () => {
+      setView(fromHash())
+      window.scrollTo({ top: 0 })
+    }
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
@@ -43,7 +48,7 @@ export default function App() {
   return (
     <div className="shell">
       <header className="masthead">
-        <a className="wordmark" href="#decide">
+        <a className="wordmark" href="#home">
           <span className="wordmark-seal" aria-hidden="true" />
           creditlens
         </a>
@@ -59,6 +64,7 @@ export default function App() {
             Can't reach the scoring service: {loadError} Start it with <code>make api</code> and reload.
           </p>
         )}
+        {view === 'home' && <Home model={model} cutoff={cutoff} />}
         {view === 'decide' && (
           <Decide model={model} cutoff={cutoff} onCutoff={setCutoff} account={account} setAccount={setAccount} />
         )}
@@ -113,7 +119,7 @@ function Tabs({ view }: { view: View }) {
   useLayoutEffect(() => {
     const place = () => {
       const el = nav.current?.querySelector<HTMLElement>(`[data-view="${view}"]`)
-      if (el) setBar({ left: el.offsetLeft, width: el.offsetWidth })
+      setBar(el ? { left: el.offsetLeft, width: el.offsetWidth } : { left: 0, width: 0 })
     }
     place()
     document.fonts.ready.then(place)
@@ -123,7 +129,7 @@ function Tabs({ view }: { view: View }) {
 
   return (
     <nav className="tabs" ref={nav} aria-label="Views">
-      {VIEWS.map((v) => (
+      {VIEWS.filter((v) => v.id !== 'home').map((v) => (
         <a key={v.id} href={`#${v.id}`} data-view={v.id} aria-current={view === v.id ? 'page' : undefined}>
           {v.label}
         </a>
