@@ -60,7 +60,7 @@ export default function Queue({ model, cutoff, batch, setBatch, onOpen }: Props)
       </div>
 
       <label
-        className={`drop ${dragging ? 'is-over' : ''} ${busy ? 'is-busy' : ''}`}
+        className={`drop ${dragging ? 'is-over' : ''} ${busy ? 'is-busy' : ''} ${batch ? 'is-compact' : ''}`}
         onDragOver={(e) => {
           e.preventDefault()
           setDragging(true)
