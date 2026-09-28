@@ -152,7 +152,7 @@ export default function Queue({ model, cutoff, batch, setBatch, onOpen }: Props)
                 </thead>
                 <tbody>
                   {rows.slice(0, shown).map((r, i) => (
-                    <tr key={r.account_id} style={{ animationDelay: `${Math.min(i, 30) * 15}ms` }}>
+                    <tr key={`${r.account_id}-${i}`} style={{ animationDelay: `${Math.min(i, 30) * 15}ms` }}>
                       <td>
                         <button className="link" onClick={() => onOpen(r.features)} title="Open in Decide">
                           {r.account_id}
