@@ -1,7 +1,9 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { getModel, type ModelInfo } from './api'
+import { getModel, type Account, type Batch, type ModelInfo } from './api'
+import { PRESETS } from './AccountControls'
 import Decide from './Decide'
 import Policy from './Policy'
+import Queue from './Queue'
 
 const VIEWS = [
   { id: 'decide', label: 'Decide' },
@@ -22,6 +24,13 @@ export default function App() {
   const [cutoff, setCutoff] = useState(0.5)
   const [model, setModel] = useState<ModelInfo | null>(null)
   const [loadError, setLoadError] = useState('')
+  const [account, setAccount] = useState<Account>(PRESETS[2].account)
+  const [batch, setBatch] = useState<Batch | null>(null)
+
+  const openAccount = (a: Account) => {
+    setAccount(a)
+    window.location.hash = 'decide'
+  }
 
   useEffect(() => {
     getModel().then(setModel, (e: Error) => setLoadError(e.message))
@@ -46,9 +55,13 @@ export default function App() {
             Can't reach the scoring service: {loadError} Start it with <code>make api</code> and reload.
           </p>
         )}
-        {view === 'decide' && <Decide model={model} cutoff={cutoff} onCutoff={setCutoff} />}
+        {view === 'decide' && (
+          <Decide model={model} cutoff={cutoff} onCutoff={setCutoff} account={account} setAccount={setAccount} />
+        )}
         {view === 'policy' && <Policy model={model} cutoff={cutoff} onCutoff={setCutoff} />}
-        {view === 'queue' && <p>queue</p>}
+        {view === 'queue' && (
+          <Queue model={model} cutoff={cutoff} batch={batch} setBatch={setBatch} onOpen={openAccount} />
+        )}
         {view === 'model' && <p>{model?.trained_on}</p>}
       </main>
     </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AccountControls, PRESETS } from './AccountControls'
+import { AccountControls } from './AccountControls'
 import { pct, scoreAccount, type Account, type ModelInfo, type Score } from './api'
 import { useTween } from './motion'
 import Waterfall from './Waterfall'
@@ -8,10 +8,15 @@ import Notice from './Notice'
 import Guilloche from './Guilloche'
 import { reconcile } from './history'
 
-type Props = { model: ModelInfo | null; cutoff: number; onCutoff: (c: number) => void }
+type Props = {
+  model: ModelInfo | null
+  cutoff: number
+  onCutoff: (c: number) => void
+  account: Account
+  setAccount: React.Dispatch<React.SetStateAction<Account>>
+}
 
-export default function Decide({ model, cutoff, onCutoff }: Props) {
-  const [account, setAccount] = useState<Account>(PRESETS[2].account)
+export default function Decide({ model, cutoff, onCutoff, account, setAccount }: Props) {
   const [score, setScore] = useState<Score | null>(null)
   const [error, setError] = useState('')
 
