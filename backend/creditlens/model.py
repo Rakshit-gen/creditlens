@@ -1,45 +1,54 @@
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import LogisticRegression
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import FunctionTransformer, SplineTransformer
+from sklearn.ensemble import HistGradientBoostingClassifier
 
 from .data import FEATURES
 
+# +1: higher value can only raise risk, -1: can only lower it, 0: free.
+# Utilization stays free because the data is truly U-shaped: barely-used cards default more than moderately used ones.
+DIRECTION = {
+    "credit_limit": -1,
+    "utilization": 0,
+    "months_late_now": 1,
+    "late_months_6m": 1,
+    "worst_delay_6m": 1,
+    "paid_in_full_6m": -1,
+    "payment_ratio": -1,
+}
 
-def build() -> Pipeline:
-    # Additive model (a GAM): each feature gets its own smooth curve, so a score splits exactly into per-feature parts.
-    return Pipeline([
-        ("log_limit", FunctionTransformer(_log_limit, feature_names_out="one-to-one")),
-        ("splines", SplineTransformer(n_knots=5, degree=2)),
-        ("lr", LogisticRegression(max_iter=2000)),
-    ])
 
-
-def _log_limit(X):
-    X = X.copy()
-    X["credit_limit"] = np.log(X["credit_limit"])
-    return X
+def build() -> HistGradientBoostingClassifier:
+    # Depth-1 trees each look at one feature, so the model is a sum of per-feature curves (a GAM).
+    return HistGradientBoostingClassifier(
+        max_depth=1,
+        monotonic_cst=[DIRECTION[f] for f in FEATURES],
+        random_state=0,
+    )
 
 
 class Scorer:
-    def __init__(self, pipe: Pipeline, X_train: pd.DataFrame):
-        self.pipe = pipe
-        splines = pipe.named_steps["splines"]
-        lr = pipe.named_steps["lr"]
-        per = splines.n_features_out_ // len(FEATURES)
-        self._coef = lr.coef_[0].reshape(len(FEATURES), per)
-        basis = self._basis(X_train)
-        self._mean_basis = basis.mean(axis=0)
-        self.base_logit = float(lr.intercept_[0] + (self._coef * self._mean_basis).sum())
+    def __init__(self, model: HistGradientBoostingClassifier, X_train: pd.DataFrame):
+        self.model = model
+        self._ref = X_train[FEATURES].iloc[[0]].reset_index(drop=True)
+        self._offset = self._raw_parts(X_train).mean(axis=0)
+        self.base_logit = float(self._logit(self._ref)[0] + self._offset.sum())
 
-    def _basis(self, X: pd.DataFrame) -> np.ndarray:
-        b = self.pipe[:-1].transform(X[FEATURES])
-        return b.reshape(len(X), len(FEATURES), -1)
+    def _logit(self, X: pd.DataFrame) -> np.ndarray:
+        return self.model.decision_function(X[FEATURES])
+
+    def _raw_parts(self, X: pd.DataFrame) -> np.ndarray:
+        X = X[FEATURES].reset_index(drop=True)
+        full = self._logit(X)
+        parts = np.empty((len(X), len(FEATURES)))
+        for i, f in enumerate(FEATURES):
+            swapped = X.copy()
+            swapped[f] = self._ref[f].iloc[0]
+            parts[:, i] = full - self._logit(swapped)
+        return parts
 
     def contributions(self, X: pd.DataFrame) -> np.ndarray:
         """Log-odds each feature adds versus the average account. Rows sum to logit minus base_logit."""
-        return ((self._basis(X) - self._mean_basis) * self._coef).sum(axis=2)
+        return self._raw_parts(X) - self._offset
 
     def predict(self, X: pd.DataFrame) -> np.ndarray:
-        return self.pipe.predict_proba(X[FEATURES])[:, 1]
+        return self.model.predict_proba(X[FEATURES])[:, 1]
