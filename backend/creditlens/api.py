@@ -63,7 +63,7 @@ async def score_batch(file: UploadFile = File(...), cutoff: float = Query(0.5, g
     if len(body) > MAX_UPLOAD_BYTES:
         raise HTTPException(413, "File is over 10 MB. Split it into smaller batches.")
     try:
-        raw = pd.read_csv(io.BytesIO(body))
+        raw = pd.read_csv(io.BytesIO(body), dtype=str, keep_default_na=False)
     except (pd.errors.ParserError, pd.errors.EmptyDataError, UnicodeDecodeError):
         raise HTTPException(400, "Couldn't read that as a CSV file.")
 

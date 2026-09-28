@@ -57,7 +57,8 @@ def validate(raw: pd.DataFrame) -> tuple[pd.DataFrame, list[dict]]:
     for c in RAW_COLUMNS:
         num = pd.to_numeric(raw[c], errors="coerce")
         for i in raw.index[num.isna()]:
-            errors.append({"row": int(i) + 2, "column": c, "message": f"'{raw.at[i, c]}' is not a number"})
+            cell = str(raw.at[i, c]).strip()
+            errors.append({"row": int(i) + 2, "column": c, "message": f"'{cell}' is not a number" if cell else "is empty"})
         raw[c] = num
     for i in raw.index[raw["credit_limit"] <= 0]:
         errors.append({"row": int(i) + 2, "column": "credit_limit", "message": "credit limit must be above 0"})
