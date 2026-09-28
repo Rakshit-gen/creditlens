@@ -690,3 +690,72 @@ input[type='range']:focus-visible {
     bottom: 0;
   }
 }
+
+/* What if */
+
+.whatif {
+  display: grid;
+  gap: 0.8rem;
+  padding-top: 1.4rem;
+  border-top: 1px dashed var(--rule);
+}
+
+.whatif h2 {
+  font-size: var(--step-1);
+}
+
+.whatif ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.whatif li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 10px;
+  background: var(--paper);
+  animation: rise 0.45s var(--ease-out) both;
+}
+
+.whatif li div {
+  display: grid;
+  line-height: 1.35;
+}
+
+.whatif li span {
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.try {
+  flex: none;
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--ink);
+  background: transparent;
+  font-weight: 700;
+  transition: background 0.2s, color 0.2s, transform 0.25s var(--ease-spring);
+}
+
+.try:hover,
+.try.is-enough {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.try:active {
+  transform: scale(0.94);
+}

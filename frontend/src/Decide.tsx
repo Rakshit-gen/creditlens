@@ -3,6 +3,8 @@ import { AccountControls, PRESETS } from './AccountControls'
 import { pct, scoreAccount, type Account, type ModelInfo, type Score } from './api'
 import { useTween } from './motion'
 import Waterfall from './Waterfall'
+import WhatIf from './WhatIf'
+import { reconcile } from './history'
 
 type Props = { model: ModelInfo | null; cutoff: number; onCutoff: (c: number) => void }
 
@@ -43,6 +45,13 @@ export default function Decide({ model, cutoff, onCutoff }: Props) {
       <section className="sheet instrument" aria-live="polite">
         {error && <p className="notice">{error}</p>}
         {score && <Readout score={score} baseRisk={model?.base_risk} cutoff={cutoff} onCutoff={onCutoff} />}
+        {score && (
+          <WhatIf
+            items={score.counterfactuals}
+            risk={score.risk}
+            onTry={(f, v) => setAccount((a) => reconcile({ ...a, [f]: v }, f))}
+          />
+        )}
       </section>
     </div>
   )
@@ -57,7 +66,7 @@ function Readout({ score, baseRisk, cutoff, onCutoff }: { score: Score; baseRisk
           <p className="risk-figure">{pct(shown)}</p>
           <p className="risk-caption">
             chance of missing next month's payment
-            {baseRisk !== undefined && <>. The average cardholder sits at {pct(baseRisk)}.</>}
+            {baseRisk !== undefined && <>. A typical cardholder sits at {pct(baseRisk)}.</>}
           </p>
         </div>
         <Stamp decision={score.decision} />

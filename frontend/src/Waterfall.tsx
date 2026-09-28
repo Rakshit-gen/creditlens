@@ -2,7 +2,7 @@ import { pct, type Reason } from './api'
 
 const sigmoid = (x: number) => 1 / (1 + Math.exp(-x))
 
-/** Reasons stacked from the average cardholder to this one. Rows are placed by rank so reordering animates. */
+/** Reasons stacked from a typical cardholder to this one. Rows are placed by rank so reordering animates. */
 export default function Waterfall({ reasons, baseRisk }: { reasons: Reason[]; baseRisk: number }) {
   const baseLogit = Math.log(baseRisk / (1 - baseRisk)) * 100
   let running = 0
@@ -26,7 +26,7 @@ export default function Waterfall({ reasons, baseRisk }: { reasons: Reason[]; ba
         </span>
       </figcaption>
       <div className="wf-row wf-edge" style={{ '--rank': 0 } as React.CSSProperties}>
-        <span className="wf-text">Average cardholder</span>
+        <span className="wf-text">Typical cardholder</span>
         <span className="wf-lane">
           <span className="wf-marker" style={{ left: `${x(0)}%` }} />
         </span>
