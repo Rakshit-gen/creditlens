@@ -47,6 +47,12 @@ export default function Decide({ model, cutoff, onCutoff, account, setAccount }:
         </p>
       </div>
 
+      {score && (
+        <p className={`mini-score is-${score.decision}`} aria-hidden="true">
+          <strong>{pct(score.risk)}</strong> risk, {score.decision === 'approve' ? 'approved' : 'declined'} at a {pct(cutoff)} cutoff
+        </p>
+      )}
+
       <AccountControls account={account} onChange={setAccount} />
 
       <section className="sheet instrument" aria-live="polite">
@@ -95,9 +101,16 @@ function Stamp({ decision }: { decision: Score['decision'] }) {
 }
 
 function RiskScale({ risk, cutoff, onCutoff }: { risk: number; cutoff: number; onCutoff: (c: number) => void }) {
+  // Shifting each tag by its own position keeps it inside the track at both ends.
+  const tag = (at: number) => ({ left: `${at * 100}%`, transform: `translateX(-${at * 100}%)` })
   return (
     <div className="scale">
+      <span className="scale-tag is-risk" style={tag(risk)}>
+        This cardholder {pct(risk)}
+      </span>
       <div className="scale-track" style={{ '--cut': `${cutoff * 100}%` } as React.CSSProperties}>
+        <span className="scale-end is-approve" aria-hidden="true">Approve</span>
+        <span className="scale-end is-decline" aria-hidden="true">Decline</span>
         <span className="scale-needle" style={{ left: `${risk * 100}%` }} />
         <input
           type="range"
@@ -106,13 +119,13 @@ function RiskScale({ risk, cutoff, onCutoff }: { risk: number; cutoff: number; o
           step={0.01}
           value={cutoff}
           aria-label="Decline cutoff"
+          aria-valuetext={`Decline at ${pct(cutoff)} risk or higher`}
           onChange={(e) => onCutoff(+e.target.value)}
         />
       </div>
-      <p className="scale-legend">
-        <span>Approve below {pct(cutoff)}</span>
-        <span>Drag the line to move the cutoff</span>
-      </p>
+      <span className="scale-tag is-cut" style={tag(cutoff)}>
+        Cutoff {pct(cutoff)}, drag to move
+      </span>
     </div>
   )
 }
