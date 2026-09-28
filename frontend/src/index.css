@@ -235,3 +235,111 @@ code {
     bottom: -0.55rem;
   }
 }
+
+/* Account controls */
+
+.controls {
+  display: grid;
+  gap: 1.1rem;
+  align-content: start;
+}
+
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.4rem;
+}
+
+.chip {
+  padding: 0.38rem 0.8rem;
+  border: 1.5px solid var(--rule);
+  border-radius: 999px;
+  background: var(--sheet);
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--ink-soft);
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.25s var(--ease-spring);
+}
+
+.chip:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+  transform: translateY(-1px);
+}
+
+.chip:active {
+  transform: scale(0.96);
+}
+
+.chip[aria-pressed='true'] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.control {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.control-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+
+.control-head output {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+input[type='range'] {
+  --fill: 50%;
+  appearance: none;
+  width: 100%;
+  height: 1.4rem;
+  background: transparent;
+  margin: 0;
+}
+
+input[type='range']::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--ink) var(--fill), var(--rule) var(--fill));
+}
+
+input[type='range']::-moz-range-track {
+  height: 6px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--ink) var(--fill), var(--rule) var(--fill));
+}
+
+input[type='range']::-webkit-slider-thumb {
+  appearance: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: calc(3px - 0.575rem);
+  border-radius: 50%;
+  background: var(--sheet);
+  border: 3px solid var(--ink);
+  transition: transform 0.2s var(--ease-spring);
+}
+
+input[type='range']::-moz-range-thumb {
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  background: var(--sheet);
+  border: 3px solid var(--ink);
+}
+
+input[type='range']:active::-webkit-slider-thumb {
+  transform: scale(1.25);
+}
+
+input[type='range']:focus-visible {
+  outline-offset: 2px;
+}
