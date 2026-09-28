@@ -1,5 +1,6 @@
 import type { Account, Feature } from './api'
 import { money } from './api'
+import { reconcile } from './history'
 
 export const PRESETS: { name: string; account: Account }[] = [
   {
@@ -45,24 +46,6 @@ const CONTROLS: Control[] = [
   { feature: 'worst_delay_6m', label: 'Worst delay in 6 months', min: 0, max: 8, step: 1, show: (v) => (v ? plural(v, 'month') : 'None') },
   { feature: 'paid_in_full_6m', label: 'Months paid in full', min: 0, max: 6, step: 1, show: (v) => `${v} of 6` },
 ]
-
-/** Keeps the six-month history physically possible after one field changes. */
-export function reconcile(a: Account, changed: Feature): Account {
-  const next = { ...a }
-  if (next.months_late_now > 0) next.late_months_6m = Math.max(next.late_months_6m, 1)
-  if (changed === 'worst_delay_6m') next.months_late_now = Math.min(next.months_late_now, next.worst_delay_6m)
-  else next.worst_delay_6m = Math.max(next.worst_delay_6m, next.months_late_now)
-  if (next.late_months_6m > 0 && next.worst_delay_6m === 0) {
-    if (changed === 'worst_delay_6m') next.late_months_6m = 0
-    else next.worst_delay_6m = 1
-  }
-  if (next.late_months_6m === 0) next.worst_delay_6m = next.months_late_now = 0
-  if (next.late_months_6m + next.paid_in_full_6m > 6) {
-    if (changed === 'paid_in_full_6m') next.late_months_6m = 6 - next.paid_in_full_6m
-    else next.paid_in_full_6m = 6 - next.late_months_6m
-  }
-  return next
-}
 
 export function AccountControls({ account, onChange }: { account: Account; onChange: (a: Account) => void }) {
   const set = (f: Feature, v: number) => onChange(reconcile({ ...account, [f]: v }, f))
