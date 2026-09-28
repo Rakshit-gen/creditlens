@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "test": "tsc src/history.test.ts src/policy.test.ts --ignoreConfig --types node --outDir .check --module esnext --moduleResolution bundler --target es2022 --skipLibCheck && node .check/history.test.js && node .check/policy.test.js"
+    "test": "tsc src/history.test.ts src/cutoffs.test.ts --ignoreConfig --types node --outDir .check --module esnext --moduleResolution bundler --target es2022 --skipLibCheck && node .check/history.test.js && node .check/cutoffs.test.js"
   },
   "dependencies": {
     "react": "^19.2.8",

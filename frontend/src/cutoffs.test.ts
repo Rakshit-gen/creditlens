@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { groups, histogram, impactRatio, outcome, profitCurve, type Holdout } from './policy.js'
+import { groups, histogram, impactRatio, outcome, profitCurve, type Holdout } from './cutoffs.js'
 
 const h: Holdout = {
   risk: [0.1, 0.2, 0.6, 0.9],
@@ -32,4 +32,4 @@ const hist = histogram(h, 10)
 assert.equal(hist.reduce((s, b) => s + b.good + b.bad, 0), 4)
 assert.equal(hist[9].bad, 1)
 
-console.log('policy checks passed')
+console.log('cutoff checks passed')
