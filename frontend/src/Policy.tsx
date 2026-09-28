@@ -121,14 +121,16 @@ function Histogram({ bins, cutoff, onCutoff }: { bins: ReturnType<typeof histogr
         <span>
           <i className="key key-bad" /> Defaulted
         </span>
-        <span className="muted">Predicted risk, left to right</span>
+        <span className="muted">Predicted risk, left to right. Heights use a square-root scale so the thin high-risk tail stays visible.</span>
       </figcaption>
       <div className="hist-plot" style={{ '--cut': `${(cutoff / HIST_MAX) * 100}%` } as React.CSSProperties}>
         <svg viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true">
           {bins.map((b, i) => {
             const declined = b.from >= cutoff - 1e-9
-            const gh = (b.good / peak) * 58
-            const bh = (b.bad / peak) * 58
+            const n = b.good + b.bad
+            const total = Math.sqrt(n / peak) * 58
+            const gh = n ? (total * b.good) / n : 0
+            const bh = n ? (total * b.bad) / n : 0
             return (
               <g key={i} className={`hist-bin ${declined ? 'is-declined' : ''}`} style={{ animationDelay: `${i * 18}ms` }}>
                 <rect className="bar-good" x={i * w + 0.15} width={w - 0.3} y={60 - gh - bh} height={gh} />
@@ -159,13 +161,29 @@ function ProfitChart({ points, best, cutoff }: { points: { cutoff: number; profi
   const y = (p: number) => 38 - ((p - lo) / (hi - lo || 1)) * 34
   const d = points.map((p, i) => `${i ? 'L' : 'M'}${x(p.cutoff).toFixed(2)} ${y(p.profit).toFixed(2)}`).join('')
   const nearest = points.reduce((a, b) => (Math.abs(b.cutoff - cutoff) < Math.abs(a.cutoff - cutoff) ? b : a))
+  const tag = (c: number) => ({ left: `${x(c)}%`, transform: `translateX(-${x(c)}%)` })
   return (
-    <svg className="profit" viewBox="0 0 100 42" preserveAspectRatio="none" role="img" aria-label={`Profit peaks at a ${pct(best.cutoff)} cutoff`}>
-      <path d={d} className="profit-line" vectorEffect="non-scaling-stroke" />
-      <line x1={x(best.cutoff)} x2={x(best.cutoff)} y1={0} y2={42} className="profit-best" vectorEffect="non-scaling-stroke" />
-      <line x1={x(cutoff)} x2={x(cutoff)} y1={0} y2={42} className="profit-now" vectorEffect="non-scaling-stroke" />
-      <circle cx={x(nearest.cutoff)} cy={y(nearest.profit)} r={1.4} className="profit-dot" />
-    </svg>
+    <figure className="profit-fig">
+      <span className="profit-tag is-best" style={tag(best.cutoff)}>
+        Most profitable, {pct(best.cutoff)}
+      </span>
+      <div className="profit-plot">
+        <svg className="profit" viewBox="0 0 100 42" preserveAspectRatio="none" role="img" aria-label={`Profit peaks at a ${pct(best.cutoff)} cutoff`}>
+          <path d={d} className="profit-line" vectorEffect="non-scaling-stroke" />
+          <line x1={x(best.cutoff)} x2={x(best.cutoff)} y1={0} y2={42} className="profit-best" vectorEffect="non-scaling-stroke" />
+          <line x1={x(cutoff)} x2={x(cutoff)} y1={0} y2={42} className="profit-now" vectorEffect="non-scaling-stroke" />
+        </svg>
+        <span className="profit-dot" style={{ left: `${x(nearest.cutoff)}%`, top: `${(y(nearest.profit) / 42) * 100}%` }} />
+      </div>
+      <span className="profit-tag is-now" style={tag(cutoff)}>
+        Your cutoff, {pct(cutoff)}
+      </span>
+      <figcaption className="hist-axis">
+        <span>{pct(CUTOFFS[0])}</span>
+        <span>Cutoff</span>
+        <span>{pct(CUTOFFS[CUTOFFS.length - 1])}</span>
+      </figcaption>
+    </figure>
   )
 }
 

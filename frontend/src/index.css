@@ -1045,11 +1045,11 @@ input[type='range']:focus-visible {
 }
 
 .hist-bin.is-declined .bar-good {
-  opacity: 0.16;
+  opacity: 0.3;
 }
 
 .hist-bin.is-declined .bar-bad {
-  opacity: 0.45;
+  opacity: 0.6;
 }
 
 .hist-cut {
@@ -1155,6 +1155,7 @@ input[type='range']:focus-visible {
 .policy-pair {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  align-items: start;
   gap: clamp(1.2rem, 3vw, 2rem);
 }
 
@@ -1174,10 +1175,37 @@ input[type='range']:focus-visible {
   justify-self: start;
 }
 
+.profit-fig {
+  margin: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.profit-plot {
+  position: relative;
+}
+
 .profit {
+  display: block;
   width: 100%;
   height: 7rem;
   overflow: visible;
+}
+
+.profit-tag {
+  position: relative;
+  width: max-content;
+  font-size: var(--step--1);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.profit-tag.is-best {
+  color: var(--approve);
+}
+
+.profit-tag.is-now {
+  color: var(--decline);
 }
 
 .profit-line {
@@ -1198,8 +1226,14 @@ input[type='range']:focus-visible {
 }
 
 .profit-dot {
-  fill: var(--decline);
-  transition: cx 0.3s var(--ease-out), cy 0.3s var(--ease-out);
+  position: absolute;
+  width: 0.7rem;
+  height: 0.7rem;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: var(--decline);
+  border: 2px solid var(--sheet);
+  transition: left 0.3s var(--ease-out), top 0.3s var(--ease-out);
 }
 
 .money-delta {
