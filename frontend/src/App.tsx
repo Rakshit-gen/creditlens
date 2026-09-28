@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { getModel, type ModelInfo } from './api'
+import Decide from './Decide'
 
 const VIEWS = [
   { id: 'decide', label: 'Decide' },
@@ -44,7 +45,7 @@ export default function App() {
             Can't reach the scoring service: {loadError} Start it with <code>make api</code> and reload.
           </p>
         )}
-        {view === 'decide' && <p>decide</p>}
+        {view === 'decide' && <Decide model={model} cutoff={cutoff} onCutoff={setCutoff} />}
         {view === 'policy' && <p>policy {cutoff}</p>}
         {view === 'queue' && <p>queue</p>}
         {view === 'model' && <p>{model?.trained_on}</p>}
