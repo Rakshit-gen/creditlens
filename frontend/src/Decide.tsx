@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { AccountControls, PRESETS } from './AccountControls'
 import { pct, scoreAccount, type Account, type ModelInfo, type Score } from './api'
 import { useTween } from './motion'
+import Waterfall from './Waterfall'
 
 type Props = { model: ModelInfo | null; cutoff: number; onCutoff: (c: number) => void }
 
@@ -62,6 +63,7 @@ function Readout({ score, baseRisk, cutoff, onCutoff }: { score: Score; baseRisk
         <Stamp decision={score.decision} />
       </div>
       <RiskScale risk={shown} cutoff={cutoff} onCutoff={onCutoff} />
+      {baseRisk !== undefined && <Waterfall reasons={score.reasons} baseRisk={baseRisk} />}
     </>
   )
 }

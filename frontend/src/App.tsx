@@ -50,7 +50,6 @@ export default function App() {
         {view === 'queue' && <p>queue</p>}
         {view === 'model' && <p>{model?.trained_on}</p>}
       </main>
-      <input type="hidden" value={cutoff} onChange={(e) => setCutoff(+e.target.value)} />
     </div>
   )
 }
