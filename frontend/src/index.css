@@ -1607,3 +1607,28 @@ tbody tr:hover {
     grid-row: 2;
   }
 }
+
+/* Grid children default to min-width: auto, which lets long nowrap text push the page wider than a phone. */
+.decide > *,
+.policy > *,
+.queue > *,
+.modelcard > *,
+.policy-pair > * {
+  min-width: 0;
+}
+
+@media (max-width: 560px) {
+  .readout {
+    flex-wrap: wrap;
+  }
+  .stamp {
+    font-size: 1.2rem;
+  }
+  .whatif li {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .try {
+    align-self: flex-start;
+  }
+}
