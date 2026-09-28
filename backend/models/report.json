@@ -1,0 +1,68 @@
+{
+  "trained_on": "2026-09-28",
+  "rows_train": 24000,
+  "rows_test": 6000,
+  "default_rate": 0.2212,
+  "fit_seconds": 0.139,
+  "metrics": {
+    "roc_auc": 0.7577,
+    "pr_auc": 0.5177,
+    "ks": 0.3884,
+    "brier": 0.1393,
+    "cv_roc_auc_mean": 0.7693,
+    "cv_roc_auc_std": 0.0213
+  },
+  "black_box_roc_auc": 0.7743,
+  "calibration": [
+    {
+      "predicted": 0.0903,
+      "actual": 0.0444,
+      "n": 563
+    },
+    {
+      "predicted": 0.0973,
+      "actual": 0.1015,
+      "n": 266
+    },
+    {
+      "predicted": 0.105,
+      "actual": 0.0933,
+      "n": 793
+    },
+    {
+      "predicted": 0.1173,
+      "actual": 0.1169,
+      "n": 770
+    },
+    {
+      "predicted": 0.1276,
+      "actual": 0.2083,
+      "n": 288
+    },
+    {
+      "predicted": 0.1369,
+      "actual": 0.1621,
+      "n": 913
+    },
+    {
+      "predicted": 0.1699,
+      "actual": 0.1785,
+      "n": 605
+    },
+    {
+      "predicted": 0.2499,
+      "actual": 0.25,
+      "n": 584
+    },
+    {
+      "predicted": 0.3986,
+      "actual": 0.3793,
+      "n": 617
+    },
+    {
+      "predicted": 0.6848,
+      "actual": 0.6905,
+      "n": 601
+    }
+  ]
+}
