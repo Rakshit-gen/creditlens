@@ -5,6 +5,7 @@ import { useTween } from './motion'
 import Waterfall from './Waterfall'
 import WhatIf from './WhatIf'
 import Notice from './Notice'
+import Guilloche from './Guilloche'
 import { reconcile } from './history'
 
 type Props = { model: ModelInfo | null; cutoff: number; onCutoff: (c: number) => void }
@@ -63,7 +64,8 @@ function Readout({ score, baseRisk, cutoff, onCutoff }: { score: Score; baseRisk
   const shown = useTween(score.risk)
   return (
     <>
-      <div className="readout">
+      <div className={`readout is-${score.decision}`}>
+        <Guilloche risk={shown} />
         <div>
           <p className="risk-figure">{pct(shown)}</p>
           <p className="risk-caption">

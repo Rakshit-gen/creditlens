@@ -838,3 +838,36 @@ input[type='range']:focus-visible {
   display: flex;
   justify-content: flex-end;
 }
+
+/* Guilloche */
+
+.guilloche {
+  position: absolute;
+  right: -4rem;
+  top: 50%;
+  width: 24rem;
+  height: 24rem;
+  margin-top: -12rem;
+  pointer-events: none;
+  fill: none;
+  stroke-width: 0.45;
+  opacity: 0.35;
+  z-index: 0;
+}
+
+.readout > :not(.guilloche) {
+  position: relative;
+  z-index: 1;
+}
+
+.readout.is-approve .guilloche {
+  stroke: var(--approve);
+}
+
+.readout.is-decline .guilloche {
+  stroke: var(--decline);
+}
+
+.guilloche path {
+  transition: stroke 0.5s;
+}
