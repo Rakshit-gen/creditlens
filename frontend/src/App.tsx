@@ -79,6 +79,7 @@ function Tabs({ view }: { view: View }) {
       if (el) setBar({ left: el.offsetLeft, width: el.offsetWidth })
     }
     place()
+    document.fonts.ready.then(place)
     window.addEventListener('resize', place)
     return () => window.removeEventListener('resize', place)
   }, [view])
