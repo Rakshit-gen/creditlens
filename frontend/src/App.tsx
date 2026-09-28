@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { getModel, type ModelInfo } from './api'
 import Decide from './Decide'
+import Policy from './Policy'
 
 const VIEWS = [
   { id: 'decide', label: 'Decide' },
@@ -46,7 +47,7 @@ export default function App() {
           </p>
         )}
         {view === 'decide' && <Decide model={model} cutoff={cutoff} onCutoff={setCutoff} />}
-        {view === 'policy' && <p>policy {cutoff}</p>}
+        {view === 'policy' && <Policy model={model} cutoff={cutoff} onCutoff={setCutoff} />}
         {view === 'queue' && <p>queue</p>}
         {view === 'model' && <p>{model?.trained_on}</p>}
       </main>
