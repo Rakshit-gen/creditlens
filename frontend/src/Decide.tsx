@@ -4,6 +4,7 @@ import { pct, scoreAccount, type Account, type ModelInfo, type Score } from './a
 import { useTween } from './motion'
 import Waterfall from './Waterfall'
 import WhatIf from './WhatIf'
+import Notice from './Notice'
 import { reconcile } from './history'
 
 type Props = { model: ModelInfo | null; cutoff: number; onCutoff: (c: number) => void }
@@ -52,6 +53,7 @@ export default function Decide({ model, cutoff, onCutoff }: Props) {
             onTry={(f, v) => setAccount((a) => reconcile({ ...a, [f]: v }, f))}
           />
         )}
+        {score?.decision === 'decline' && <Notice score={score} />}
       </section>
     </div>
   )

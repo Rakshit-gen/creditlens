@@ -759,3 +759,82 @@ input[type='range']:focus-visible {
 .try:active {
   transform: scale(0.94);
 }
+
+/* Decline letter */
+
+.letter-open {
+  justify-self: start;
+  padding: 0.6rem 1.1rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--decline);
+  color: #fff;
+  font-weight: 700;
+  transition: transform 0.25s var(--ease-spring), filter 0.2s;
+}
+
+.letter-open:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.letter {
+  width: min(40rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 3rem);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 1.4rem 1.6rem;
+  background: var(--sheet);
+  color: var(--ink);
+  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.45);
+}
+
+.letter[open] {
+  animation: letter-in 0.4s var(--ease-spring);
+}
+
+.letter::backdrop {
+  background: color-mix(in srgb, var(--ink) 35%, transparent);
+  backdrop-filter: blur(3px);
+}
+
+@keyframes letter-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px) rotate(-1.5deg);
+  }
+}
+
+.letter-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.letter-head h2 {
+  font-size: var(--step-1);
+}
+
+.letter-close {
+  border: none;
+  background: none;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: var(--ink-soft);
+}
+
+.letter pre {
+  font-family: var(--body);
+  white-space: pre-wrap;
+  line-height: 1.6;
+  margin: 1rem 0;
+  padding: 1.2rem;
+  border-radius: 10px;
+  background: var(--paper);
+  background-image: repeating-linear-gradient(0deg, var(--line) 0 1px, transparent 1px 1.6em);
+}
+
+.letter-actions {
+  display: flex;
+  justify-content: flex-end;
+}
