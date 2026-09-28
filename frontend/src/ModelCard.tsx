@@ -37,7 +37,7 @@ export default function ModelCard({ model }: { model: ModelInfo | null }) {
         <section className="sheet tradeoff">
           <h2>What explainability costs</h2>
           <p className="muted">
-            A gradient-boosted model with free rein over all 18 raw columns does a little better. It can't say why it
+            A gradient-boosted model with free rein over all 19 raw columns does a little better. It can't say why it
             declined anyone without approximations like SHAP, and nothing stops it from learning that paying more makes
             you riskier.
           </p>
@@ -168,7 +168,7 @@ function CurvePlot({ curve, format }: { curve: Curve; format: (v: number) => str
         onPointerLeave={() => setI(null)}
       >
         <line x1={0} x2={100} y1={y(0)} y2={y(0)} className="curve-zero" vectorEffect="non-scaling-stroke" />
-        <path d={d} className="curve-line" vectorEffect="non-scaling-stroke" pathLength={1} />
+        <path d={d} className="curve-line" vectorEffect="non-scaling-stroke" />
         {i !== null && <line x1={x(i)} x2={x(i)} y1={0} y2={50} className="curve-cursor" vectorEffect="non-scaling-stroke" />}
       </svg>
     </figure>
