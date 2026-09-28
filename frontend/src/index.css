@@ -768,7 +768,7 @@ input[type='range']:focus-visible {
   border: none;
   border-radius: 8px;
   background: var(--decline);
-  color: #fff;
+  color: var(--sheet);
   font-weight: 700;
   transition: transform 0.25s var(--ease-spring), filter 0.2s;
 }
