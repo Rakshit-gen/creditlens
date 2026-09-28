@@ -86,7 +86,8 @@ backend/
   creditlens/explain.py reason text, counterfactuals, per-feature curves
   creditlens/train.py   split, fit, evaluate, save model bundle and report.json
   creditlens/api.py     FastAPI: /api/score, /api/score/batch, /api/model, /api/sample.csv
-frontend/               React + Vite, no UI or chart libraries
+frontend/               React + Vite, no UI or chart libraries, light and dark themes
+  Home                  a live two-slider demo, the problems above, and measured results
   Decide                sliders, live score, reason waterfall, what-ifs, decline letter
   Policy                cutoff histogram, outcomes, profit curve, group approval rates
   Queue                 CSV upload, ranked accounts, bad-row report, export
