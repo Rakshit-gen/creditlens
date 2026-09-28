@@ -47,7 +47,10 @@ export default function App() {
           <span className="wordmark-seal" aria-hidden="true" />
           creditlens
         </a>
-        <Tabs view={view} />
+        <div className="masthead-right">
+          <Tabs view={view} />
+          <ThemeToggle />
+        </div>
       </header>
 
       <main className="stage" key={view}>
@@ -65,7 +68,41 @@ export default function App() {
         )}
         {view === 'model' && <ModelCard model={model} />}
       </main>
+
+      <footer className="footer">
+        <p>
+          Data: <a href="https://archive.ics.uci.edu/dataset/350/default+of+credit+card+clients">Default of Credit Card Clients</a>,
+          UCI Machine Learning Repository. 30,000 cardholders in Taiwan, 2005, amounts in NT$.
+        </p>
+        <p>
+          <a href="https://github.com/Rakshit-gen/creditlens">Source on GitHub</a>. MIT licensed. Not financial or legal advice.
+        </p>
+      </footer>
     </div>
+  )
+}
+
+const systemDark = () => window.matchMedia('(prefers-color-scheme: dark)').matches
+
+function ThemeToggle() {
+  const [dark, setDark] = useState(() => {
+    const t = document.documentElement.dataset.theme
+    return t ? t === 'dark' : systemDark()
+  })
+  const flip = () => {
+    const next = dark ? 'light' : 'dark'
+    document.documentElement.dataset.theme = next
+    try {
+      localStorage.setItem('theme', next)
+    } catch {
+      // Private windows can block storage; the theme still applies for this visit.
+    }
+    setDark(!dark)
+  }
+  return (
+    <button className="theme" onClick={flip} aria-label={dark ? 'Switch to light theme' : 'Switch to dark theme'} title={dark ? 'Light theme' : 'Dark theme'}>
+      <span className={`theme-orb ${dark ? 'is-dark' : ''}`} aria-hidden="true" />
+    </button>
   )
 }
 

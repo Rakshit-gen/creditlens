@@ -30,7 +30,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --paper: #0f1631;
     --paper-deep: #151e40;
     --sheet: #18224a;
@@ -45,6 +45,22 @@
     --line: rgba(228, 233, 246, 0.07);
     color-scheme: dark;
   }
+}
+
+:root[data-theme='dark'] {
+  --paper: #0f1631;
+  --paper-deep: #151e40;
+  --sheet: #18224a;
+  --ink: #e4e9f6;
+  --ink-soft: #a9b3d4;
+  --ink-faint: #6f7aa3;
+  --rule: #2c3767;
+  --approve: #5cc68f;
+  --decline: #f27164;
+  --approve-wash: #173b33;
+  --decline-wash: #43213a;
+  --line: rgba(228, 233, 246, 0.07);
+  color-scheme: dark;
 }
 
 *,
@@ -124,8 +140,13 @@ button {
 
 .shell {
   min-height: 100vh;
-  background-image:
-    repeating-linear-gradient(0deg, var(--line) 0 1px, transparent 1px 28px);
+  display: flex;
+  flex-direction: column;
+}
+
+.stage {
+  flex: 1;
+  width: 100%;
 }
 
 .masthead {
@@ -1630,5 +1651,69 @@ tbody tr:hover {
   }
   .try {
     align-self: flex-start;
+  }
+}
+
+/* Theme toggle and footer */
+
+.masthead-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.theme {
+  display: grid;
+  place-items: center;
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: 50%;
+  border: 1.5px solid var(--rule);
+  background: var(--sheet);
+  transition: border-color 0.2s, transform 0.4s var(--ease-spring);
+}
+
+.theme:hover {
+  border-color: var(--ink);
+  transform: rotate(-20deg);
+}
+
+.theme-orb {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: inset 0 0 0 0 var(--sheet);
+  transition: box-shadow 0.45s var(--ease-spring), background 0.3s;
+}
+
+.theme-orb.is-dark {
+  box-shadow: inset 5px -4px 0 0 var(--sheet);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.6rem 2rem;
+  padding: 1.6rem clamp(1rem, 4vw, 3rem) 2rem;
+  border-top: 1px solid var(--rule);
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+
+.footer a {
+  color: var(--ink);
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 560px) {
+  .masthead-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .theme {
+    width: 2rem;
+    height: 2rem;
   }
 }
